@@ -1,5 +1,5 @@
 # connect_4_AI
-Attempt to create a connect 4 AI using neural networks using keras and tensorflow
+Attempt to create a connect 4 AI based on a neural network using keras and tensorflow.
 
 To run this code you need to install the keras and tensorflow libraries, as well as numpy.
 
