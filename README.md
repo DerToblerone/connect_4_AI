@@ -39,3 +39,27 @@ File descriptions:
     
   * **win.py**  
     Contains a function to determine the winner of a connect 4 game.
+    
+###Training recommendations:  
+A network with 30 hidden neurons seems to produce decent results. In the training_generated_data.py file, a network
+like this is trained with 10000 generated games (takes quite long on my pc) for 50 epochs. On my setup it achieved the
+following winrate(RNG = random opponent, RX = random_rollout with parameter X:
+  
+w:  19  l:  1   d:  0   RNG
+w:  15  l:  4   d:  1   R50
+w:  8   l:  11  d:  1   R250
+w:  13  l:  7   d:  0   R500
+
+It is surprising that it lost against RNG, but it performed quite well against the other machine opponents.
+
+As comparison, a network with 60 hidden neurons that trained via TD achived the following score:
+
+w:  20  l:  0   d:  0   RNG
+w:  9   l:  9   d:  2   R50
+w:  1   l:  17  d:  2   R250
+w:  0   l:  15  d:  5   R500
+
+Even though it was less strong against the rollout opponents, the two networks playing against each other resulted in a score of 
+10 to 10. 
+
+
