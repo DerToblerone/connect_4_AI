@@ -59,7 +59,7 @@ w:  9   l:  9   d:  2   R50
 w:  1   l:  17  d:  2   R250  
 w:  0   l:  15  d:  5   R500  
 
-Even though it was less strong against the rollout opponents, the two networks playing against each other resulted in a score of  
-10 to 10. 
+Even though it was less strong against the rollout opponents, the two networks playing against each other resulted in a  
+score of 10 to 10. 
 
 
