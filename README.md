@@ -62,7 +62,7 @@ w:  0   l:  15  d:  5   R500
 Even though it was less strong against the rollout opponents, the two networks playing against each other resulted in a  
 score of 10 to 10. 
 
-Update:
+### Update:
 A longer test run over 100 games has resulted in the following.
 
 60 hidden neurons trained via self play:
