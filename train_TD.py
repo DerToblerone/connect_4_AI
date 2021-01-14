@@ -4,23 +4,21 @@ import random
 import time
 from datetime import datetime
 
-import subprocess
 
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-from sklearn.model_selection import train_test_split
 
 import sys
 import os
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-from oppo import Human
-from oppo import rand_opp
-from oppo import random_rollout
+from oppo import Human, rand_opp, random_rollout
 import test_network
+
+from util import str2vec, drop_piece, reverse_move
 
 #diagnotic  variables
 game_counter = 0
@@ -28,12 +26,12 @@ gen_counter = 0
 error_counter = 0
 
 try:
-    model = keras.models.load_model('./parameters')
+    model = keras.models.load_model('./model_generated_data')
     print("load complete")
 except:
     model = keras.Sequential()
     model.add(layers.Dense(42, input_dim = 42, activation="sigmoid", name="inputProcesser")) #blaue und rote steine werden seperat in das netzwerk geleitet
-    model.add(layers.Dense(60, activation="sigmoid"))
+    model.add(layers.Dense(28, activation="sigmoid"))
     #model.add(layers.Dense(14,activation = "sigmoid"))
     model.add(layers.Dense(1,activation = "sigmoid"))
 
@@ -71,26 +69,7 @@ def display_state(state,value,_type = "self", explore = [-1,-1]):
     print("current position value estimate: {3} \ngeneration: {0}, total games so far: {1} \nerrors while training: {2}".format(gen_counter, game_counter,error_counter, value))
     print(_type)
 
-def str2vec(state):
-    l = list(state)
-    result = np.zeros(42)
-    for i in range(42):
-        if l[i] == 'X':
-            result[i] = 1 
-        if l[i] == 'O':
-            result[i] = -1       
-    return result
 
-
-def drop_piece(state,column,char):
-        #pass state as string 
-        tmp = list(state)
-        for k in range(1,6):
-            if tmp[6*column + k] != "_":
-                tmp[6*column + k -1] = char 
-                return ["".join(tmp), [column,k-1]]
-        tmp[6*column + 5] = char
-        return ["".join(tmp), [column,5]]
 
 def get_value(states):
     value = []
@@ -133,13 +112,6 @@ def play_move(state,char,terminal = False):
          
     return move_values
 
-def reverse_move(state, column):
-    l = list(state)
-    for i in range(6):
-        if l[6*column + i] != "_":
-            l[6*column + i] = "_"
-            break      
-    return "".join(l)
 
 def exploration_move(state):
     prob = []
@@ -324,7 +296,7 @@ def play_opp(opponent, state, c_start ='X'):
 #training code beginnt hier
 
 generations = 50
-games = 2
+games = 10
 
 #diese gegnerliste wird durchlaufen beim training
 opp_list ={
@@ -336,16 +308,18 @@ random_rollout(100),
 random_rollout(250),
 random_rollout(1000)}
 
+opp_list = []
+#das netzwerk spielt nur gegen sich selbst in diesem fall
+
 state = "".join(["_" for x in range(42)])#empty field
 
 
 
 for gen in range(generations):
     total_moves = 0
-    for g in range(games):
-        game_counter += 1
-        #pro iteration spielt das netzwerk zweimal gegen sich selbst
-        data_x, data_y = play(state)
+
+    data_x, data_y = play(state)
+    for g in range(games-1):
         game_counter += 1
         tmp_x, tmp_y = play(state)
         data_x = np.concatenate((data_x , tmp_x), axis = 0)
@@ -359,17 +333,17 @@ for gen in range(generations):
             data_x = np.concatenate((data_x , tmp_x), axis = 0)
             data_y = np.concatenate((data_y, tmp_y), axis = 0)
             game_counter += 2
-        try:
-            #es lernt sofort von den gespielten spielen
-            model.fit(x=data_x,y=data_y)
-            total_moves = len(data_x)
-            print("{0} moves in data set, {1} games played, winner: {2}".format(len(data_x),g+1,data_y[-1]), end= "\r")
-            
-        except:
-            print("error training game {0}".format(g))
-            error_counter += 1
+    try:
+        #es lernt sofort von den gespielten spielen
+        model.fit(x=data_x,y=data_y)
+        total_moves = len(data_x)
+        print("{0} moves in data set, {1} games played, winner: {2}".format(len(data_x),g+1,data_y[-1]), end= "\r")
+        
+    except:
+        print("error training game {0}".format(g))
+        error_counter += 1
     
-    model.save("./parameters")
+    model.save("./model_step2")
 
     with open('training_log.txt', 'a') as _file:
         _file.write("{3}_g:{0}c:{1}m:{2}\n".format(gen,game_counter,total_moves,datetime.now()))
