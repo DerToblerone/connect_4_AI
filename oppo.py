@@ -3,7 +3,7 @@ import sys
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-
+from util import drop_piece
 
 
 class Human:
@@ -16,19 +16,10 @@ class Human:
                 k = int(input("column:"))
                 print(state[6*k])
                 if state[6*k] == '_':
-                    return self.drop_piece(state,k,char) + [k]
+                    return drop_piece(state,k,char) + [k]
             except:
                 pass
-    
-    def drop_piece(self,state,column,char):
-        #pass state as string
-        tmp = list(state)
-        for k in range(1,6):
-            if tmp[6*column + k] != "_":
-                tmp[6*column + k -1] = char 
-                return ["".join(tmp), [column,k-1]]
-        tmp[6*column + 5] = char
-        return ["".join(tmp), [column,5]]
+
 
 class rand_opp:
     def __init__(self, c = 'O'):
@@ -41,17 +32,8 @@ class rand_opp:
                 legal_move_list.append(k)
         
         l = random.choice(legal_move_list)
-        return self.drop_piece(state,l,char) + [l]
-    
-    def drop_piece(self,state,column,char):
-        #pass state as string
-        tmp = list(state)
-        for k in range(1,6):
-            if tmp[6*column + k] != "_":
-                tmp[6*column + k -1] = char 
-                return ["".join(tmp), [column,k-1]]
-        tmp[6*column + 5] = char
-        return ["".join(tmp), [column,5]]
+        return drop_piece(state,l,char) + [l]
+
        
 
 class random_rollout():
@@ -74,13 +56,13 @@ class random_rollout():
             index = eval_move_list.index(max(eval_move_list))
         else:
             index = eval_move_list.index(min(eval_move_list))
-        return self.drop_piece(state,legal_move_list[index],char) + [legal_move_list[index]]
+        return drop_piece(state,legal_move_list[index],char) + [legal_move_list[index]]
 
     def rollout(self,state,char,move):
         s = state
         m = move
         c = char
-        s = self.drop_piece(s,m,c)
+        s = drop_piece(s,m,c)
         if c == 'X':
             c = 'O'
         else:
@@ -107,17 +89,7 @@ class random_rollout():
                 legal_move_list.append(k)
         
         l = random.choice(legal_move_list)
-        return self.drop_piece(state,l,char)
-    
+        return drop_piece(state,l,char)
 
-    def drop_piece(self,state,column,char):
-        #pass state as string
-        tmp = list(state)
-        for k in range(1,6):
-            if tmp[6*column + k] != "_":
-                tmp[6*column + k -1] = char 
-                return ["".join(tmp), [column,k-1]]
-        tmp[6*column + 5] = char
-        return ["".join(tmp), [column,5]]
 
     
