@@ -7,13 +7,8 @@ import sys
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-
-from util import str2vec
-from util import drop_piece
-from util import display_state
-
-from predict_util import get_value
-from predict_util import play_move
+from util import str2vec, drop_piece, display_state,time2str
+from predict_util import get_value, play_move
 
 
 
@@ -98,5 +93,5 @@ except:
     exit()
 
 
-conduct_test(10,mod_old, "old model", mod_new, "new model", 'net_vs_net_results.txt')
+conduct_test(50,mod_old, "old model", mod_new, "new model", '{}_net_vs_net_results.txt'.format(time2str()))
 input()

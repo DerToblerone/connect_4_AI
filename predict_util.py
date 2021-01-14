@@ -7,8 +7,7 @@ import sys
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-from util import str2vec
-from util import drop_piece
+from util import str2vec, drop_piece
 
 def get_value(states, model):
     value = []

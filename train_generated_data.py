@@ -10,12 +10,8 @@ import sys
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-
-from oppo import rand_opp
-from oppo import random_rollout
-
-from util import str2vec
-from util import drop_piece
+from oppo import rand_opp, random_rollout
+from util import str2vec, drop_piece
 
 def play_game(player, opponent):
     game = []
