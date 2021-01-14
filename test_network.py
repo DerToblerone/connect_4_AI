@@ -159,7 +159,7 @@ def main(model, n, path = "test_records.txt"):
     g = random_rollout()
     print("opponent {}".format(type(g)))
     conduct_test(n,g,'R50',model,path)
-    """
+
     g = random_rollout(250)
     print("opponent {}".format(type(g)))
     conduct_test(n,g,'R250',model,path)
@@ -167,7 +167,7 @@ def main(model, n, path = "test_records.txt"):
     g = random_rollout(500)
     print("opponent {}".format(type(g)))
     conduct_test(n,g,"R500",model,path)
-    """
+
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2], sys.argv[3])

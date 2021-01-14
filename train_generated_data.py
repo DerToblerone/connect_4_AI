@@ -18,51 +18,36 @@ from util import str2vec
 from util import drop_piece
 
 def play_game(player, opponent):
-
-
-    total_data =[]
     game = []
     results = []
 
     char = 'X'
-
-    movelist = []
     state = "".join(['_' for i in range(42)])
 
     while(True):
         
         game.append(str2vec(state))
+        results.append(1)
         #zug wird angehängt
 
         if char == 'O':
             move = opponent.choose_move(state,char)[-1]
         else:
             move = player.choose_move(state,char)[-1]
-           
-
-            
-        movelist.append(move)
-
         
         state, index = drop_piece(state, move, char)
-
         victor = winner([state,index])
-
-        results.append(1)
         
         #je nach dem wer gewonnen hat werden die züge mit labels versehen
-
         if victor != '_':
-
-            total_data = total_data + game
-
             if victor == 'X':
                 pass
             elif victor == 'O':
                 results = [x * 0 for x in results]
             elif victor == '.':
                 results = [x * 0.5 for x in results]
-            break            
+            break  
+            #der while loop wird terminiert          
 
        
         if char == 'X':
@@ -70,11 +55,9 @@ def play_game(player, opponent):
         else:
             char = 'X'
 
-    return np.array(total_data),np.array(results)
+    return np.array(game),np.array(results)
 
-
-
-
+#hier beginnt die ausführung:
 
 try:
     model = keras.models.load_model('./model_generated_data')
@@ -93,39 +76,28 @@ model.summary()
 
 input("press enter to start training")
 
-
-
-
-
-
-
-o_list = [rand_opp(),
+o_list = [random_rollout(1000),
 random_rollout(),
 random_rollout(75),
 random_rollout(100),
 random_rollout(250),
 random_rollout(500)]
 
-samples = 10000
-
+samples = 100
 
 data_x , data_y = play_game(random.choice(o_list), random.choice(o_list))
 print("{} samples generated".format(1), end="\r")
+#data_x und data_y werden initialisiert, es zählt als das erste sample
 for i in range(samples - 1):
     tmp_x , tmp_y = play_game(random.choice(o_list), random.choice(o_list))
+
     data_x = np.concatenate((data_x , tmp_x), axis = 0)
     data_y = np.concatenate((data_y, tmp_y), axis = 0)
+
     print("{} samples generated".format(i+2), end="\r")
 
-report = model.fit(x=data_x,y=data_y,epochs = 50)
+model.fit(x=data_x,y=data_y,epochs = 1)
+
 model.save("./model_generated_data")
+
 input("training done")
-
-with open('tlog_gen.txt', 'a') as _file:
-        _file.write(str(report))
-
-
-
-
-
-

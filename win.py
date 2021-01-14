@@ -1,8 +1,6 @@
-#der sieger wird anhand des spielfelds sowie des letzten gespielten steines ermittelt
 def winner(gameinfo):
     state = gameinfo[0]
     index = gameinfo[1]
-    #ist unentschieden? wenn ja return '.'
     if any(['_' == c for c in state]):
         pass
     else:
@@ -32,16 +30,17 @@ def winner(gameinfo):
                 try:
                     if state[6*(_x) + _y] == char:
                         win_condition[k] += 1
+                        if win_condition[k] > 3:
+                            pass
+                            #print("x: {0}; y: {1}; _x: {2}, _y: {3}, k: {4}".format(x,y,_x,_y,k))
                     else:
                         break
                 except:
                     break
         k += 1
 
-    #falls in einer der 4 richtungen mehr als 3 steine in einer reihe sind
-    #ist das spiel vorbei und jemand hat gewonnen
+    
     for entry in win_condition:
         if entry > 3:
             return char
     return '_'
-    #ansonsten hat niemand gewonnen und es geht weiter

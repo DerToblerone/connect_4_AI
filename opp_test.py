@@ -8,22 +8,7 @@ from oppo import rand_opp
 from oppo import random_rollout
 
 from util import drop_piece
-
-def display_state(state):
-    os.system('cls||clear')
-    print("0 1 2 3 4 5 6")
-    for row in range(6):
-        r = []
-        for column in range(7):
-            char = state[6*column + row]
-            color = '\x1b[0m'
-            if char == 'X':
-                color = '\x1b[6;30;42m'
-            elif char == 'O':
-                color = '\x1b[6;30;41m'
-
-            r.append(color + char +'\x1b[0m' + ' ' )
-        print("".join(r))
+from util import display_state
 
 
 def play(player, opponent, lookahead = 2, inp=True, char= 'X', human= True):

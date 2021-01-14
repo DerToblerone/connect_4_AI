@@ -12,7 +12,8 @@ from util import drop_piece
 
 def get_value(states, model):
     value = []
-    #hier wird der wert eines bestimmten spielbretts(state) bestimmt
+    #hier wird der wert eines zustandes bestimmt
+    #dabei wird die tabelle durch das netzwerk ersetzt
     s = np.array(states)
     if states != []:
         value = model.predict(s, batch_size = len(s))
@@ -32,24 +33,17 @@ def play_move(state,char,lookahead, model, terminal = 0):
             else:
                 move_values[i] = 2
         else:
-            #mögliuche züge werden gespielt und dann weiter analysiert
             s = drop_piece(state,i,char)
             if winner(s) != '_':
-                #falls ein zug ein spielende herbeiführt, muss er nicht weiter analysiert werden
                 if char == 'X':
                     move_values[i] =1 
                 else:
                     move_values[i] = 0
-                continue
-                #die for schleife überspringt deshalb die nächsten zwei zeilen
-            #falls ein zug das spiel nicht beendet, so wird das resultierende spielbrett an die liste der zu untersuchenden
-            #züge angehängt. ausserdem wird die spalte auch notiert, in der ein spielstein eingeworfen wurde.
+                continue 
             check_moves.append(s[0])
             index_list.append(i) 
-
-
-    #falls die variable terminal grösser ist als die anzahl der zu berechnenden halbzüge, wird mithilfe des netzwerks eine
-    #bewertung des zuges berechnet
+        if terminal == 0:
+            pass
     if terminal >= lookahead:   
         for k in range(len(check_moves)):
             check_moves[k] = str2vec(check_moves[k])
@@ -58,7 +52,6 @@ def play_move(state,char,lookahead, model, terminal = 0):
             move_values[index_list[i]] = predicted_values[i][0]
     else:
         t = terminal
-        #ansonsten wird die funktion wieder selber aufgerufen
         for i in range(len(check_moves)):   
             temp_val = play_move(check_moves[i],opp_char,lookahead,model,terminal=t+1)
             if char == 'X':
@@ -67,7 +60,4 @@ def play_move(state,char,lookahead, model, terminal = 0):
                 move_values[index_list[i]] = max(temp_val)
             if(terminal == 0):
                 pass
-    #die liste der endgültigen bewertungen ergibt sich folgendermassen:
-    #das netzwerk rechnet per minmax einige (halb)züge vorraus und bewertet den ausgangs zug
-    #anhand dieser wertungen
     return move_values
