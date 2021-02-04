@@ -1,12 +1,18 @@
 # connect_4_AI
-Attempt to create a connect 4 AI based on a neural network using keras and tensorflow.
+Initially this was an attempt to create a connect 4 AI based on a neural network using keras and tensorflow. In the end, an agent based on the Monte Carlo tree search was the strongest. For simple games like this it seems to figure out the good strategies very fast.
 
 To run this code you need to install the keras and tensorflow libraries, as well as numpy.
 
 File descriptions:
+
+* **mcts.py**
+    This contains a Monte Carlo tree search algorithm. It outperforms every other agent that I programmed by a lot and was not difficult to implement.
   
 * **net_vs_net.py**  
     This file loads two saved networks and lets them play 20 games against each other. The results are then saved in a .txt file.
+    
+* **node.py**
+    Contains a class needed for mcts.py
     
  * **opp_test.py**   
     You can use this file to play against non-neural network opponents. By changing the parameters of the play() function at the end, you can play human vs human, human vs CPU or CPU vs CPU.
