@@ -14,7 +14,8 @@ from predict_util import get_value, play_move
 
 path = input("specify path:")
 if len(path) == 0:
-    path = ('./parameters')
+    path = ('.\model_generated_data')
+    #path = ('./parameters')
     
 
 

@@ -3,7 +3,9 @@ import os
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
+
 from oppo import Human, rand_opp, random_rollout
+from mcts import mcts
 from util import drop_piece, display_state
 
 
@@ -43,10 +45,14 @@ def play(player, opponent, lookahead = 2, inp=True, char= 'X', human= True):
             display_state(state)
     return
 
+
 pl = random_rollout(50)
 opp0 = random_rollout(250)
-opp = random_rollout(1500)
+opp = random_rollout(3000)
 opp2 = Human()
-play(opp0,opp)
-play(opp,opp0)
+montecarlo = mcts(15000, 20)
+mc2 = mcts(15000, 7)
+play(montecarlo, mc2)
+play(mc2, montecarlo)
+
 input()

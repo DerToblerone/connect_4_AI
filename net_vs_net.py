@@ -92,6 +92,8 @@ except:
     input("loading error")
     exit()
 
-
+mod_old.summary()
+mod_new.summary()
+input()
 conduct_test(50,mod_old, "old model", mod_new, "new model", '{}_net_vs_net_results.txt'.format(time2str()))
 input()

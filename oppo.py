@@ -1,9 +1,12 @@
 import random
+import math
 import sys
+import time
 sys.path.append('.')
 #imports aus dem ordner:
 from win import winner
-from util import drop_piece
+from util import drop_piece, get_legal_moves
+from node import Node
 
 
 class Human:
@@ -26,11 +29,7 @@ class rand_opp:
         self.char = c
         
     def choose_move(self, state,char):
-        legal_move_list = []
-        for k in range(7):
-            if state[6*k] == '_':
-                legal_move_list.append(k)
-        
+        legal_move_list = get_legal_moves(state)
         l = random.choice(legal_move_list)
         return drop_piece(state,l,char) + [l]
 
@@ -41,12 +40,9 @@ class random_rollout():
         self.n = n
 
     def choose_move(self,state,char):
-        legal_move_list = []
-        eval_move_list =[]
-        for k in range(7):
-            if state[6*k] == '_':
-                legal_move_list.append(k)
-                eval_move_list.append(0)
+        legal_move_list = get_legal_moves(state)
+        eval_move_list =[0 for k in legal_move_list]
+        
         
         for k in range(len(legal_move_list)):
             for j in range(self.n):
@@ -59,10 +55,9 @@ class random_rollout():
         return drop_piece(state,legal_move_list[index],char) + [legal_move_list[index]]
 
     def rollout(self,state,char,move):
-        s = state
         m = move
         c = char
-        s = drop_piece(s,m,c)
+        s = drop_piece(state,m,c)
         if c == 'X':
             c = 'O'
         else:
@@ -91,5 +86,3 @@ class random_rollout():
         l = random.choice(legal_move_list)
         return drop_piece(state,l,char)
 
-
-    

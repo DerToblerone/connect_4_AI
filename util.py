@@ -52,3 +52,10 @@ def reverse_move(state, column):
             l[6*column + i] = "_"
             break      
     return "".join(l)
+
+def get_legal_moves(state):
+    legal_move_list = []
+    for k in range(7):
+        if state[6*k] == '_':
+            legal_move_list.append(k)
+    return legal_move_list

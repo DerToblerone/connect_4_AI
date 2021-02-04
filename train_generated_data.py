@@ -79,7 +79,7 @@ random_rollout(100),
 random_rollout(250),
 random_rollout(500)]
 
-samples = 100
+samples = 1000
 
 data_x , data_y = play_game(random.choice(o_list), random.choice(o_list))
 print("{} samples generated".format(1), end="\r")
@@ -92,7 +92,7 @@ for i in range(samples - 1):
 
     print("{} samples generated".format(i+2), end="\r")
 
-model.fit(x=data_x,y=data_y,epochs = 1)
+model.fit(x=data_x,y=data_y,epochs = 50)
 
 model.save("./model_generated_data")
 

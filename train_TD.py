@@ -152,7 +152,6 @@ def play(state, c_start ='X'):
         values = play_move(state,char)
         if m >= 0:
             move = m
-            #values[m] = (2 if char == 'O' else  -1)
             m = -1
         else:
             if char == 'O':
@@ -205,8 +204,6 @@ def play(state, c_start ='X'):
         else: 
             #der wert des gespielten zuges wird zur vorherigen position assoziiert
             results.append(value_buffer)
-
-        #print("current length {0}, current value {1}".format(len(results), value_buffer), end = "\r")
        
         if char == 'X':
             char ='O'
